@@ -53,12 +53,12 @@ class ImageDataset(Dataset):
     def __init__(self, data_txt: str, data_shape: tuple, img_channel: int, num_label: int,
                  alphabet: str, phase: str = 'train'):
         """
-        数据集初始化
-        :param data_txt: 存储着图片路径和对于label的文件
-        :param data_shape: 图片的大小(h,w)
-        :param img_channel: 图片通道数
-        :param num_label: 最大字符个数,应该和网络最终输出的序列宽度一样
-        :param alphabet: 字母表
+        init dataset
+        :param data_txt: path of txt file
+        :param data_shape: img size(h,w)
+        :param img_channel: input channel of img
+        :param num_label: number of label
+        :param alphabet: alphabet
         """
         super(ImageDataset, self).__init__()
         assert phase in ['train', 'test']
@@ -95,9 +95,9 @@ class ImageDataset(Dataset):
 
     def label_enocder(self, label):
         """
-        对label进行处理，将输入的label字符串转换成在字母表中的索引
-        :param label: label字符串
-        :return: 索引列表
+        label transform
+        :param label: label string
+        :return: lable transformed with alphabet
         """
         tmp_label = nd.zeros(self.num_label, dtype=np.float32) - 1
         for i, ch in enumerate(label):
@@ -108,9 +108,9 @@ class ImageDataset(Dataset):
 
     def pre_processing(self, img_path):
         """
-        对图片进行处理，先按照高度进行resize，resize之后如果宽度不足指定宽度，就补黑色像素，否则就强行缩放到指定宽度
+        pre_processing
 
-        :param img_path: 图片地址
+        :param img_path: path of img
         :return:
         """
         data_augment = False
@@ -481,7 +481,6 @@ def setup_logger(log_file_path: str = None):
     import logging
     from colorlog import ColoredFormatter
     logging.basicConfig(filename=log_file_path, format='%(asctime)s %(levelname)-8s %(filename)s: %(message)s',
-                        # 定义输出log的格式
                         datefmt='%Y-%m-%d %H:%M:%S', )
     """Return a logger with a default ColoredFormatter."""
     formatter = ColoredFormatter("%(asctime)s %(log_color)s%(levelname)-8s %(reset)s %(filename)s: %(message)s",
